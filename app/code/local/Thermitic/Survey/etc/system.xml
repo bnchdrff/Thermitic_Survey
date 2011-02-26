@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <thermitic translate="label" module="survey">
+            <label>Thermitic Extensions</label>
+            <sort_order>100</sort_order>
+        </thermitic>
+    </tabs>
+    <sections>
+        <thermitic translate="label" module="survey">
+            <label>Thermitic Extension Options</label>
+            <tab>thermitic</tab>
+            <sort_order>1000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+ 
+            <groups>
+                <survey translate="label" module="survey">
+                    <label>Survey Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+ 
+                    <fields>
+                        <question translate="label">
+                            <label>Question: </label>
+                            <comment>This will display during the checkout process</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </question>
+                        <answers translate="label">
+                            <label>Answers: </label>
+                            <comment>Enter a list of possible answers</comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </answers>
+                    </fields>
+                </survey>
+            </groups>
+        </thermitic>
+        <design>
+            <groups>
+                <admin translate="label">
+                    <label>Admin Theme</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <fields>
+                        <theme translate="label comment">
+                            <label>Admin theme name</label>
+                            <comment>Override default admin theme.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </theme>
+                    </fields>
+                </admin>
+            </groups>
+        </design>
+    </sections>
+</config>

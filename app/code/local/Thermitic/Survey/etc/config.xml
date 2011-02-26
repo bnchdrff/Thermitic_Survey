@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+      <Thermitic_Survey>
+         <version>0.1.0</version>
+      </Thermitic_Survey>
+   </modules>
+   
+  <global>
+      <models>
+          <survey>
+              <class>Thermitic_Survey_Model</class>
+          </survey>
+          
+          <checkout>
+              <rewrite>
+                  <type_onepage>Thermitic_Survey_Model_Type_Onepage</type_onepage>
+              </rewrite>
+          </checkout>   
+            
+          <thermiticadminthemecontroller>
+               <class>Thermitic_Survey_Controller</class>
+          </thermiticadminthemecontroller>            
+                          
+      </models>
+          
+      <helpers>
+          <survey>
+              <class>Thermitic_Survey_Helper</class>
+          </survey>
+      </helpers>
+        
+        <blocks>        
+            <checkout>
+                <rewrite>
+                    <onepage>Thermitic_Survey_Block_Onepage</onepage>
+                </rewrite>
+            </checkout>        
+        
+            <survey>
+                <class>Thermitic_Survey_Block</class>
+            </survey>  
+            
+            <surveyonepage>
+                <class>Thermitic_Survey_Block_Onepage</class>
+            </surveyonepage>                                
+        </blocks>
+
+      <rewrite>
+        <thermitic_survey_onepage>
+            <from><![CDATA[#^/checkout/onepage/#]]></from>
+          <to>/survey/onepage/</to>
+        </thermitic_survey_onepage>
+      </rewrite>
+                
+        
+        <resources>
+            <survey_setup>
+              <setup>
+                 <module>Thermitic_Survey</module>
+                  <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+              </setup>
+              <connection>
+                 <use>core_setup</use>
+              </connection>
+          </survey_setup>
+        </resources>
+        
+        <events>
+          <!-- START Adds the Admin theme switcher, enables to avoid modify admin themes -->
+            <adminhtml_controller_action_predispatch_start>
+              <observers>
+                <thermitic_themeoverride_observer>
+                  <type>singleton</type>
+                  <!-- thermiticadminthemecontroller/observer  -->
+                  <class>Thermitic_Survey_Controller_Observer</class>
+                  <method>overrideTheme</method>
+                </thermitic_themeoverride_observer>
+              </observers>
+            </adminhtml_controller_action_predispatch_start>
+            <!-- END Adds the Admin theme switcher, enables to avoid modify admin themes -->          
+        </events>
+        
+        
+   </global>
+
+    <frontend>
+    
+      <routers>
+          <thermitic_survey>
+          <use>standard</use>
+              <args>
+                  <module>Thermitic_Survey</module>
+                  <frontName>survey</frontName>
+              </args>
+          </thermitic_survey>    
+          
+      </routers>    
+    
+      <events>
+      <!-- START Custom added by Branko Ajzele: Hooks into order save event -->
+      <checkout_onepage_controller_success_action>
+          <observers>
+              <hooksystem_order_success>
+                  <type>singleton</type>
+                  <class>survey/observer</class>
+                  <method>hookToOrderSaveEvent</method>
+              </hooksystem_order_success>
+          </observers>
+      </checkout_onepage_controller_success_action>
+      <!-- END Custom added by Branko Ajzele: Hooks into order save event -->
+      
+      
+      
+      
+      </events>
+      
+      <layout>
+      <updates>
+          <survey>
+              <file>survey.xml</file>
+            </survey>
+        </updates>
+   </layout>      
+      
+   </frontend>
+   <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <thermitic>
+                                            <title>Thermitic - All</title>
+                                        </thermitic>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+    <default>
+        <thermitic>
+            <survey>
+                <question>What are you going to ask your customers?</question>
+                <answers>This is a customer response choice</answers>
+            </survey>
+        </thermitic>
+    </default>
+</config>

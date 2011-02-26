@@ -1,0 +1,102 @@
+<form id="co-survey-form" action="">
+
+<?php 
+
+$_options = explode("\n",Mage::getStoreConfig('thermitic/survey/answers',Mage::app()->getStore()));
+
+?>
+
+	<select id="getsurvey" name="getsurvey">
+		<?php foreach($_options as $_option): ?>
+			<option value="<?php echo $this->htmlEscape($_option) ?>"><?php echo $this->htmlEscape($_option) ?></option>
+		<?php endforeach; ?>
+		<option id="getsurvey-other" value="<?php echo $this->__('Other') ?>"><?php echo $this->__('Other') ?></option>
+	</select>
+
+</form>
+
+
+<div class="button-set">
+    <p class="required"><?php echo $this->__('<em>*</em> Required Field') ?></p>
+    <div id="survey-buttons-container">
+        <button type="button" class="form-button right" onclick="survey.save();"><span><?php echo $this->__('Continue') ?></span></button>
+        <span id="survey-please-wait" style="display:none;" class="opc-please-wait">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" class="v-middle" alt="" /> &nbsp; <?php echo $this->__('Loading next step...') ?> &nbsp;
+        </span>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+//<![CDATA[
+
+var Survey = Class.create();
+Survey.prototype = {
+    initialize: function(form, saveUrl){
+        this.form = form;
+        if ($(this.form)) {
+            $(this.form).observe('submit', function(event){this.save();Event.stop(event);}.bind(this));
+        }
+        this.saveUrl = saveUrl;
+        this.onSave = this.nextStep.bindAsEventListener(this);
+        this.onComplete = this.resetLoadWaiting.bindAsEventListener(this);
+    },
+
+    save: function(){
+        if (checkout.loadWaiting!=false) return;
+
+        var validator = new Validation(this.form);
+        if (validator.validate()) {
+
+            checkout.setLoadWaiting('survey');
+
+
+            var request = new Ajax.Request(
+                this.saveUrl,
+                {
+                    method: 'post',
+                    onComplete: this.onComplete,
+                    onSuccess: this.onSave,
+                    onFailure: checkout.ajaxFailure.bind(checkout),
+                    parameters: Form.serialize(this.form)
+                }
+            );
+        }
+    },
+
+    resetLoadWaiting: function(transport){
+        checkout.setLoadWaiting(false);
+    },
+
+    nextStep: function(transport){
+        if (transport && transport.responseText){
+            try{
+                response = eval('(' + transport.responseText + ')');
+            }
+            catch (e) {
+                response = {};
+            }
+        }
+
+        if (response.error){
+            if ((typeof response.message) == 'string') {
+                alert(response.message);
+            } else {
+                if (window.billingRegionUpdater) {
+                    billingRegionUpdater.update();
+                }
+
+                alert(response.message.join("\n"));
+            }
+
+            return false;
+        }
+
+        checkout.setStepResponse(response);
+    }    
+}
+
+var survey = new Survey('co-survey-form', '<?php echo $this->getUrl('checkout/onepage/saveSurvey') ?>');
+
+//]]>
+</script>

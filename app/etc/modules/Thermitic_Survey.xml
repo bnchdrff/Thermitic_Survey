@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<config>
+    <modules>
+        <Thermitic_Survey>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Thermitic_Survey>
+    </modules>
+</config>
